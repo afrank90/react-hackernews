@@ -1,0 +1,71 @@
+/* Components style, to be moved when we extract non App components into separate files. */
+.c-page {
+  margin: 20px;
+}
+
+.interactions {
+  text-align: center;
+}
+
+.c-table {
+  margin: 20px 0;
+}
+
+.c-table__header {
+  display: flex;
+  line-height: 24px;
+  font-size: 16px;
+  padding: 0 10px;
+  justify-content: space-between;
+}
+
+.c-table__header > span,
+.c-table__row > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 5px;
+}
+
+.c-table__row {
+  display: flex;
+  line-height: 24px;
+  white-space: nowrap;
+  margin: 10px 0;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+}
+
+.c-table--empty {
+  margin: 200px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.c-button--inline {
+  border-width: 0;
+  background: transparent;
+  color: inherit;
+  text-align: inherit;
+  -webkit-font-smoothing: inherit;
+  padding: 0;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.c-button--active {
+  border-radius: 0px;
+  border-bottom: 1px solid #38bb6c;
+}
+
+.c-column--large {
+  width: 40%;
+}
+
+.c-column--medium {
+  width: 30%;
+}
+
+.c-column--small {
+  width: 10%;
+}

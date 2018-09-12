@@ -1,0 +1,45 @@
+/* Components style, to be moved when we extract non App components into separate files. */
+body {
+  background-color: #f4f4f4;
+  font: 400 14px CoreSans, Arial, sans-serif;
+}
+
+*:focus {
+  outline: none;
+}
+
+body, a {
+  color: #222;
+}
+
+a:hover {
+  color: #777;
+  text-decoration: none;
+}
+
+ul, li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button, input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+input {
+  outline: none;
+  margin-right: 10px;
+}
+
+button {
+  background: transparent;
+  color: 808080;
+  cursor: pointer;
+}
+
+button:hover {
+  color: #222;
+}
