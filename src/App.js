@@ -7,10 +7,11 @@ const DEFAULT_SEARCH = 'redux';
 const BASE_PATH = 'https://hn.algolia.com/api/v1';
 const SEARCH_ENDPOINT = '/search';
 const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page=';
 
 // Higher order function to identify search and return callback to filter.
-const isSearched = searchTerm =>
-  item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
+// const isSearched = searchTerm =>
+//   item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
 class App extends Component {
 
@@ -30,13 +31,38 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this);
 
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
+
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+  }
+
+  /**
+   * @description Search list via API
+   */
+  onSearchSubmit(event) {
+    const { searchTerm } = this.state;
+
+    this.fetchSearchTopStories(searchTerm);
+
+    event.preventDefault();
   }
 
   /**
    * @param {Object} apiResponse 
    */
   setSearchTopStories(apiResponse) {
-    this.setState({ apiResponse });
+    const { hits, page } = apiResponse;
+
+    const oldHits = page !== 0
+      ? this.state.apiResponse.hits
+      : [];
+
+    const updatedHits = [
+      ...oldHits,
+      ...hits
+    ];
+
+    // User spread operator? 
+    this.setState({ apiResponse: { hits:  updatedHits, page } });
   }
 
   onDismiss(objectID) {
@@ -73,9 +99,20 @@ class App extends Component {
    */
   componentDidMount() {
     const { searchTerm } = this.state;
-    const url = `${BASE_PATH}${SEARCH_ENDPOINT}?${PARAM_SEARCH}${searchTerm}`;
+    
+    this.fetchSearchTopStories(searchTerm);
+  }
 
-    fetch(url)
+  /**
+   * @description Fetching list of result from API using search term.
+   * 
+   * @param {string} searchTerm 
+   */
+  fetchSearchTopStories(searchTerm, page = 0) {
+    const url = `${BASE_PATH}${SEARCH_ENDPOINT}`;
+    const urlQueryParams = `?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
+
+    fetch(`${url}${urlQueryParams}`)
       .then(response => response.json())
       .then(apiResponse => this.setSearchTopStories(apiResponse))
       .catch(error => error);
@@ -124,25 +161,31 @@ class App extends Component {
   render() {
     // Map values from state object to list of variables. Equal to PHP list() function.
     const { apiResponse, searchTerm } = this.state;
-    
-    if (!apiResponse) {
-      return null;
-    }
+    const page = (apiResponse && apiResponse.page) || 0;
 
     return (
       <div className="c-page">
         <div className="interactions">
           <Search 
             value={searchTerm} 
-            onChange={this.onSearchChange} 
-          />
+            onChange={this.onSearchChange}
+            onSubmit={this.onSearchSubmit}
+          >Search</Search>
         </div>
+        
+        { apiResponse &&
+          <Table 
+            list={apiResponse.hits}
+            onDismiss={this.onDismiss}
+          />
+        }
 
-        <Table 
-          list={apiResponse.hits}
-          searchTerm={searchTerm}
-          onDismiss={this.onDismiss}
-        />
+        <div className="interactions">
+          <Button onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}>
+            More
+          </Button>
+
+        </div>
       </div>
     );
   }
@@ -153,22 +196,24 @@ class App extends Component {
  * 
  * @param {Object} props Reactjs object of props.
  */
-const Search = ({ value, onChange, children }) => 
-  <form>
-    {children}
+const Search = ({ value, onChange, onSubmit, children }) => 
+  <form onSubmit={onSubmit}>
     <input 
       type="text"
       value={value}
       onChange={onChange}
     />
+    <button type="submit">
+      {children}
+    </button>
   </form>
 
 /**
  * Table to render list of items.
  */
-const Table = ({ list, searchTerm, onDismiss }) =>
+const Table = ({ list, onDismiss }) =>
   <div className="c-table">
-    {list.filter(isSearched(searchTerm)).map(item => 
+    {list.map(item => 
       <div key={item.objectID} className="c-table__row">
         <span>
           <a href={item.url} className="c-column--large">{item.title} </a> 
