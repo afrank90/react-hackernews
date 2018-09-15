@@ -52,11 +52,10 @@ class App extends Component {
     const { hits, page } = result;
     const { searchKey, results } = this.state;
 
-    const oldHits = results && results[searchKey] ? results[searchKey] : [];
+    const oldHits = results && results[searchKey] ? results[searchKey].hits : [];
 
     const updatedHits = [...oldHits, ...hits];
 
-    // User spread operator?
     this.setState({
       results: {
         ...results,
@@ -119,7 +118,7 @@ class App extends Component {
   render() {
     // Map values from state object to list of variables. Equal to PHP list() function.
     const { results, searchTerm, searchKey } = this.state;
-    const page =
+    const page = 
       (results && results[searchKey] && results[searchKey].page) || 0;
 
     const list =
