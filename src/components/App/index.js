@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './App.css';
+import Button from '../Button';
+import Search from '../Search';
+import Table from '../Table';
+import './index.css';
 
 // Configurations
 const DEFAULT_SEARCH = 'redux';
@@ -57,7 +60,6 @@ class App extends Component {
     const { searchKey, results } = this.state;
 
     const oldHits = results && results[searchKey] ? results[searchKey].hits : [];
-
     const updatedHits = [...oldHits, ...hits];
 
     this.setState({
@@ -171,52 +173,5 @@ class App extends Component {
     );
   }
 }
-
-/**
- * Stateless component with no use of lifecycle functions.
- *
- * @param {Object} props Reactjs object of props.
- */
-const Search = ({ value, onChange, onSubmit, children }) => (
-  <form onSubmit={onSubmit}>
-    <input type="text" value={value} onChange={onChange} />
-    <button type="submit">{children}</button>
-  </form>
-);
-
-/**
- * Table to render list of items.
- */
-const Table = ({ list, onDismiss }) => (
-  <div className="c-table">
-    {list.map(item => (
-      <div key={item.objectID} className="c-table__row">
-        <span>
-          <a href={item.url} className="c-column--large">
-            {item.title}{' '}
-          </a>
-          <span className="c-column--medium">{item.author} </span>
-          <span className="c-column--small">{item.comments} </span>
-          <span className="c-column--small">{item.points}</span>
-        </span>
-
-        <span>
-          <Button
-            onClick={() => onDismiss(item.objectID)}
-            className="c-button--inline"
-          >
-            Dismiss
-          </Button>
-        </span>
-      </div>
-    ))}
-  </div>
-);
-
-const Button = ({ onClick, children, className = '' }) => (
-  <button onClick={onClick} className={className} type="button">
-    {children}
-  </button>
-);
 
 export default App;
