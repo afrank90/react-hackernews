@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './App.css';
 
 // Configurations
@@ -10,11 +11,14 @@ const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 
 class App extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
 
     this.state = {
       results: null,
+      error: null,
       searchKey: '',
       searchTerm: DEFAULT_SEARCH
     };
@@ -93,11 +97,17 @@ class App extends Component {
    * Useful for fetching data form API.
    */
   componentDidMount() {
+    this._isMounted = true;
+
     const { searchTerm } = this.state;
 
     this.setState({ searchKey: searchTerm });
 
     this.fetchSearchTopStories(searchTerm);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   /**
@@ -109,15 +119,20 @@ class App extends Component {
     const url = `${BASE_PATH}${SEARCH_ENDPOINT}`;
     const urlQueryParams = `?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
 
-    fetch(`${url}${urlQueryParams}`)
-      .then(response => response.json())
-      .then(results => this.setSearchTopStories(results))
-      .catch(error => error);
+    axios(`${url}${urlQueryParams}`)
+      .then(result => this._isMounted && this.setSearchTopStories(result.data))
+      .catch(error => this._isMounted && this.setState({ error }));
   }
 
   render() {
     // Map values from state object to list of variables. Equal to PHP list() function.
-    const { results, searchTerm, searchKey } = this.state;
+    const {
+      results,
+      searchTerm,
+      searchKey,
+      error
+    } = this.state;
+
     const page = 
       (results && results[searchKey] && results[searchKey].page) || 0;
 
@@ -135,8 +150,15 @@ class App extends Component {
             Search
           </Search>
         </div>
-
-        <Table list={list} onDismiss={this.onDismiss} />
+        { error 
+          ? <div className="interactions">
+              <p>Can't fetch data!</p>
+            </div>
+          : <Table 
+              list={list} 
+              onDismiss={this.onDismiss} 
+            />
+        }
 
         <div className="interactions">
           <Button
