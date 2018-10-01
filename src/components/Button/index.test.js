@@ -9,19 +9,19 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Button', () => {
   const props = {
-    onClick: () => {},
     className: 'test-class-name',
-    children: 'Button text.'
+    children: 'Button text.',
+    onClick: () => {}
   };
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<Button>More results</Button>, div);
+    ReactDOM.render(<Button {...props}>More results</Button>, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 
   test('has valid snapshot', () => {
-    const component = renderer.create(<Button>More results</Button>);
+    const component = renderer.create(<Button {...props}>More results</Button>);
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

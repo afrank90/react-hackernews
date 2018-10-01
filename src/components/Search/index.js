@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Stateless component with no use of lifecycle functions.
@@ -11,5 +12,12 @@ const Search = ({ value, onChange, onSubmit, children }) => (
     <button type="submit">{children}</button>
   </form>
 );
+
+Search.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  children: PropTypes.string,
+  value: PropTypes.string
+};
 
 export default Search;

@@ -2,8 +2,8 @@
 
 exports[`Button has valid snapshot 1`] = `
 <button
-  className=""
-  onClick={undefined}
+  className="test-class-name"
+  onClick={[Function]}
   type="button"
 >
   More results

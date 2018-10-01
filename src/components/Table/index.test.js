@@ -15,16 +15,17 @@ describe('Table', () => {
         author: 'author 1',
         num_comments: 1,
         points: 2,
-        objectID: 'w'
+        objectID: 123
       },
       {
         title: 'title 2',
         author: 'author 2',
         num_comments: 4,
         points: 3,
-        objectID: 'y'
+        objectID: 1234
       }
-    ]
+    ],
+    onDismiss: () => {}
   };
 
   it('renders without crashing', () => {
