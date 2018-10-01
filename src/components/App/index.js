@@ -33,6 +33,10 @@ class App extends Component {
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
   }
 
+  /**
+   * @description Before we perform request to API to pull top stories,
+   * we need to check if we already have them stored in cache/state
+   */
   needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm];
   }
@@ -59,7 +63,8 @@ class App extends Component {
     const { hits, page } = result;
     const { searchKey, results } = this.state;
 
-    const oldHits = results && results[searchKey] ? results[searchKey].hits : [];
+    const oldHits =
+      results && results[searchKey] ? results[searchKey].hits : [];
     const updatedHits = [...oldHits, ...hits];
 
     this.setState({
@@ -128,14 +133,9 @@ class App extends Component {
 
   render() {
     // Map values from state object to list of variables. Equal to PHP list() function.
-    const {
-      results,
-      searchTerm,
-      searchKey,
-      error
-    } = this.state;
+    const { results, searchTerm, searchKey, error } = this.state;
 
-    const page = 
+    const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
 
     const list =
@@ -152,15 +152,13 @@ class App extends Component {
             Search
           </Search>
         </div>
-        { error 
-          ? <div className="interactions">
-              <p>Can't fetch data!</p>
-            </div>
-          : <Table 
-              list={list} 
-              onDismiss={this.onDismiss} 
-            />
-        }
+        {error ? (
+          <div className="interactions">
+            <p>Can't fetch data!</p>
+          </div>
+        ) : (
+          <Table list={list} onDismiss={this.onDismiss} />
+        )}
 
         <div className="interactions">
           <Button
