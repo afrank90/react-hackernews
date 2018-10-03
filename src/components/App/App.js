@@ -3,6 +3,7 @@ import axios from 'axios';
 import Button from '../Button';
 import Search from '../Search';
 import Table from '../Table';
+import Throbber from '../Throbber';
 import './index.css';
 
 // Configurations
@@ -22,6 +23,7 @@ class App extends Component {
     this.state = {
       results: null,
       error: null,
+      isLoading: false,
       searchKey: '',
       searchTerm: DEFAULT_SEARCH
     };
@@ -47,7 +49,10 @@ class App extends Component {
   onSearchSubmit(event) {
     const { searchTerm } = this.state;
 
-    this.setState({ searchKey: searchTerm });
+    this.setState({
+      searchKey: searchTerm,
+      isLoading: true
+    });
 
     if (this.needsToSearchTopStories(searchTerm)) {
       this.fetchSearchTopStories(searchTerm);
@@ -71,7 +76,8 @@ class App extends Component {
       results: {
         ...results,
         [searchKey]: { hits: updatedHits, page }
-      }
+      },
+      isLoading: false
     });
   }
 
@@ -108,7 +114,10 @@ class App extends Component {
 
     const { searchTerm } = this.state;
 
-    this.setState({ searchKey: searchTerm });
+    this.setState({
+      searchKey: searchTerm,
+      isLoading: false
+    });
 
     this.fetchSearchTopStories(searchTerm);
   }
@@ -126,6 +135,8 @@ class App extends Component {
     const url = `${BASE_PATH}${SEARCH_ENDPOINT}`;
     const urlQueryParams = `?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
 
+    this.setState({ isLoading: true });
+
     axios(`${url}${urlQueryParams}`)
       .then(result => this._isMounted && this.setSearchTopStories(result.data))
       .catch(error => this._isMounted && this.setState({ error }));
@@ -133,7 +144,7 @@ class App extends Component {
 
   render() {
     // Map values from state object to list of variables. Equal to PHP list() function.
-    const { results, searchTerm, searchKey, error } = this.state;
+    const { results, searchTerm, searchKey, isLoading, error } = this.state;
 
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
@@ -161,11 +172,15 @@ class App extends Component {
         )}
 
         <div className="interactions">
-          <Button
-            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-          >
-            More
-          </Button>
+          {isLoading ? (
+            <Throbber className="c-throbber__small" />
+          ) : (
+            <Button
+              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+            >
+              More
+            </Button>
+          )}
         </div>
       </div>
     );
