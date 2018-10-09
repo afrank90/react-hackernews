@@ -30,6 +30,7 @@ npm test
 npm run lint src/components
 ```
 ### TODO
+- Add SASS or LESS
 - Add Webpack
 - Add Babel
 - Run linting for entire `src/` directory.
