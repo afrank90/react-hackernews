@@ -15,10 +15,10 @@ const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 
 class App extends Component {
-  _isMounted = false;
-
   constructor(props) {
     super(props);
+
+    this._isMounted = false;
 
     this.state = {
       results: null,
@@ -165,7 +165,7 @@ class App extends Component {
         </div>
         {error ? (
           <div className="interactions">
-            <p>Can't fetch data!</p>
+            <p>{'Can not fetch data!'}</p>
           </div>
         ) : (
           <Table list={list} onDismiss={this.onDismiss} />

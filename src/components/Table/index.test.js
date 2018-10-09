@@ -43,6 +43,6 @@ describe('Table', () => {
   it('shows two items in the list', () => {
     const element = shallow(<Table {...props} />);
 
-    expect(element.find('.c-table__row').length).toBe(2);
+    expect(element.find('.c-table__row')).toHaveLength(2);
   });
 });
