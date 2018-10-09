@@ -37,4 +37,4 @@ jobs:
       - run: npm test
 
       # Run linting
-      - run: eslint ./src/components
+      - run: npm run lint src/components
