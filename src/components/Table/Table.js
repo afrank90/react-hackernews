@@ -44,7 +44,7 @@ Table.propTypes = {
       author: PropTypes.string,
       num_comments: PropTypes.number,
       points: PropTypes.number,
-      objectID: PropTypes.number.isRequired
+      objectID: PropTypes.string.isRequired
     })
   ).isRequired,
   onDismiss: PropTypes.func.isRequired

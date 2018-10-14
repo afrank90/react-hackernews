@@ -3,13 +3,14 @@ import axios from 'axios';
 import Button from '../Button';
 import Search from '../Search';
 import Table from '../Table';
-import Throbber from '../Throbber';
+import withLoading from '../../hocs/withLoading';
+import parameters from '../../config/parameters';
 import './index.css';
 
 // Configurations
 const DEFAULT_SEARCH = 'redux';
 
-const BASE_PATH = 'https://hn.algolia.com/api/v1';
+const BASE_PATH = parameters.hacker_news_api_url;
 const SEARCH_ENDPOINT = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
@@ -152,6 +153,9 @@ class App extends Component {
     const list =
       (results && results[searchKey] && results[searchKey].hits) || [];
 
+    // HOC for button with loading throbber.
+    const ButtonWithLoading = withLoading(Button);
+
     return (
       <div className="c-page">
         <div className="interactions">
@@ -172,15 +176,11 @@ class App extends Component {
         )}
 
         <div className="interactions">
-          {isLoading ? (
-            <Throbber className="c-throbber__small" />
-          ) : (
-            <Button
-              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-            >
-              More
-            </Button>
-          )}
+          <ButtonWithLoading 
+            isLoading={isLoading}
+            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+            More
+          </ButtonWithLoading>
         </div>
       </div>
     );
