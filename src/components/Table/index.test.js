@@ -15,14 +15,14 @@ describe('Table', () => {
         author: 'author 1',
         num_comments: 1,
         points: 2,
-        objectID: 123
+        objectID: '123'
       },
       {
         title: 'title 2',
         author: 'author 2',
         num_comments: 4,
         points: 3,
-        objectID: 1234
+        objectID: '1234'
       }
     ],
     onDismiss: () => {}
