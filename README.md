@@ -1,4 +1,5 @@
-## This is learning react codebase!
+## Description
+This is learning react codebase! It's a simple UI to fetch data from the API.
 
 ### Stack
 - ES6
