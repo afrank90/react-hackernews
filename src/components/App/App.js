@@ -15,6 +15,9 @@ const SEARCH_ENDPOINT = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 
+// HOC for button with loading throbber.
+const ButtonWithLoading = withLoading(Button);
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -153,9 +156,6 @@ class App extends Component {
     const list =
       (results && results[searchKey] && results[searchKey].hits) || [];
 
-    // HOC for button with loading throbber.
-    const ButtonWithLoading = withLoading(Button);
-
     return (
       <div className="c-page">
         <div className="interactions">
@@ -176,9 +176,10 @@ class App extends Component {
         )}
 
         <div className="interactions">
-          <ButtonWithLoading 
+          <ButtonWithLoading
             isLoading={isLoading}
-            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+          >
             More
           </ButtonWithLoading>
         </div>

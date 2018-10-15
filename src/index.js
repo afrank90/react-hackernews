@@ -6,9 +6,9 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-// This addition is allowing to reload page modules without browser refresh.
+// Reload page modules without browser refresh.
 if (module.hot) {
-    module.hot.accept();
+  module.hot.accept();
 }
 
 registerServiceWorker();
